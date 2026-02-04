@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nâu – Website bán cà phê</title>
+
+  <style>
+    :root{
+      --brown:#6f4e37;
+      --beige:#f5f0e6;
+      --white:#ffffff;
+      --dark:#3e2a1f;
+    }
+    *{box-sizing:border-box;font-family:Segoe UI, Tahoma, sans-serif}
+    body{margin:0;background:var(--beige);color:var(--dark)}
+
+    /* HEADER */
+    header{
+      background:var(--brown);
+      color:var(--white);
+      padding:15px 30px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    nav a{
+      color:var(--white);
+      margin-left:20px;
+      text-decoration:none;
+      font-weight:500;
+    }
+    nav a:hover{text-decoration:underline}
+
+    .container{padding:30px;max-width:1200px;margin:auto}
+
+    /* SEARCH */
+    .search-box{
+      margin-bottom:20px;
+      display:flex;
+      gap:10px;
+    }
+    .search-box input{
+      flex:1;
+      padding:10px;
+      border:1px solid #ccc;
+      border-radius:6px;
+    }
+    .search-box button{
+      background:var(--brown);
+      color:white;
+      border:none;
+      padding:10px 20px;
+      border-radius:6px;
+      cursor:pointer;
+    }
+
+    /* PRODUCTS */
+    .products{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:20px;
+    }
+    .card{
+      background:white;
+      border-radius:12px;
+      padding:15px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+      position:relative;
+      transition:transform .3s;
+    }
+    .card:hover{transform:translateY(-5px)}
+    .card img{
+      width:100%;
+      height:160px;
+      object-fit:cover;
+      border-radius:10px;
+      margin-bottom:10px;
+    }
+    .card h3{margin:8px 0}
+    .price{color:var(--brown);font-weight:bold}
+    .badge{
+      position:absolute;
+      top:10px;right:10px;
+      background:var(--brown);
+      color:white;
+      padding:4px 8px;
+      border-radius:6px;
+      font-size:12px;
+    }
+
+    /* FORM */
+    form{
+      max-width:400px;
+      margin:50px auto;
+      background:white;
+      padding:25px;
+      border-radius:12px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    }
+    form h2{text-align:center}
+    form input{
+      width:100%;
+      padding:10px;
+      margin-bottom:15px;
+      border-radius:6px;
+      border:1px solid #ccc;
+    }
+    form button{
+      width:100%;
+      background:var(--brown);
+      color:white;
+      border:none;
+      padding:12px;
+      border-radius:6px;
+      cursor:pointer;
+    }
+
+    /* TIMER */
+    .timer{
+      text-align:center;
+      font-size:32px;
+      margin-top:40px;
+      color:var(--brown);
+      font-weight:bold;
+    }
+    .warning{animation:blink 1s infinite}
+    @keyframes blink{50%{opacity:.4}}
+
+    footer{
+      background:var(--brown);
+      color:white;
+      text-align:center;
+      padding:15px;
+      margin-top:40px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>☕ Nâu</h1>
+  <nav>
+    <a href="index.html">Trang chủ</a>
+    <a href="about.html">Giới thiệu</a>
+    <a href="baitap01.html">Sản phẩm</a>
+    <a href="contact.html">Liên hệ</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Sản phẩm nổi bật</h2>
+
+  <div class="search-box">
+    <input type="text" id="search" placeholder="Tìm sản phẩm..." />
+    <button onclick="searchProduct()">Tìm</button>
+  </div>
+  <p id="message" style="color:red"></p>
+
+  <div class="products" id="productList"></div>
+
+  <!-- FORM -->
+  <form id="register">
+    <h2>Đăng ký thành viên</h2>
+    <input type="text" id="name" placeholder="Họ tên" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Mật khẩu" required />
+    <label><input type="checkbox" id="agree"/> Đồng ý điều khoản</label><br><br>
+    <button type="submit">Đăng ký</button>
+    <p id="formMsg"></p>
+  </form>
+
+  <!-- COUNTDOWN -->
+  <div class="timer" id="timer">10:00</div>
+</div>
+
+<footer>
+  © 2026 Nâu – MSSV 221A010680
+</footer>
+
+<script>
+/* PRODUCTS */
+const products=[
+  {name:'Matcha (Nóng)',price:55000,img:'images/matchanong.png'},
+  {name:'Matcha (Đá)',price:55000,img:'images/matchada.png'},
+  {name:'Bánh sừng bò',price:35000,img:'images/banhsungbo.png'},
+  {name:'Cà phê Espresso',price:45000,img:'images/caphe.png'},
+  {name:'Cà phê sữa',price:30000,img:'images/caphesua.png'},
+  {name:'Cà phê pha phin',price:28000,img:'images/phephin.png'},
+  {name:'Nước cam',price:30000,img:'images/nuoccam.png'},
+  {name:'Trà đào cam sả',price:40000,img:'images/tradao.png'},
+  {name:'Nước trái cây nhiệt đới',price:45000,img:'images/traicaynhiendoi.png'}
+];
+
+const list=document.getElementById('productList');
+
+function render(arr){
+  list.innerHTML='';
+  arr.forEach(p=>{
+    const div=document.createElement('div');
+    div.className='card';
+    div.innerHTML=`
+      <span class="badge">SALE</span>
+      <img src="${p.img}" alt="${p.name}">
+      <h3>${p.name}</h3>
+      <p class="price">${p.price.toLocaleString()} đ</p>
+    `;
+    list.appendChild(div);
+  });
+}
+render(products);
+
+function searchProduct(){
+  const key=document.getElementById('search').value.toLowerCase().trim();
+  const result=products.filter(p=>p.name.toLowerCase().includes(key));
+  document.getElementById('message').innerText=result.length?'':'Không tìm thấy sản phẩm';
+  render(result);
+}
+
+/* FORM */
+document.getElementById('register').addEventListener('submit',e=>{
+  e.preventDefault();
+  const emailInput=document.getElementById('email');
+  const passwordInput=document.getElementById('password');
+  const agree=document.getElementById('agree');
+  const formMsg=document.getElementById('formMsg');
+
+  const emailRegex=/^\S+@\S+\.\S+$/;
+  const passRegex=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+  if(!emailRegex.test(emailInput.value) ||
+     !passRegex.test(passwordInput.value) ||
+     !agree.checked){
+    formMsg.innerText='Thông tin không hợp lệ';
+    formMsg.style.color='red';
+    return;
+  }
+  formMsg.innerText='Đăng ký thành công!';
+  formMsg.style.color='green';
+});
+
+/* COUNTDOWN */
+let time=600;
+const timerEl=document.getElementById('timer');
+const interval=setInterval(()=>{
+  time--;
+  const m=String(Math.floor(time/60)).padStart(2,'0');
+  const s=String(time%60).padStart(2,'0');
+  timerEl.textContent=`${m}:${s}`;
+  if(time<=60) timerEl.classList.add('warning');
+  if(time<=0){
+    clearInterval(interval);
+    alert('Hết thời gian!');
+  }
+},1000);
+</script>
+
+</body>
+</html>
